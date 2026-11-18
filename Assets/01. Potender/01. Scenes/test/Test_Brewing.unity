@@ -261,6 +261,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6190738570027787323, guid: 9b7fdf41810e7be4a9070ae212d05e69, type: 3}
   m_PrefabInstance: {fileID: 2108647756}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &240153845 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 910272230498718336, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
+  m_PrefabInstance: {fileID: 216648953085796295}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a302c0cc470f94d8d51953ac37e8e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.IngredientBottle
 --- !u!1 &264097915
 GameObject:
   m_ObjectHideFlags: 0
@@ -907,8 +918,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02899246938d0c645ac46c15efbaec43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Potender.BrewingKeyboardTester
-  shaker: {fileID: 0}
-  bottles: []
+  shaker: {fileID: 810038589}
+  bottles:
+  - {fileID: 240153845}
+  - {fileID: 1189575858}
   tiltAngle: 120
   shakeAmplitude: 0.1
   shakeFrequency: 4
@@ -927,6 +940,17 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &810038589 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1108117539480513464, guid: a37fb71296ee3c141a70332a80d324cd, type: 3}
+  m_PrefabInstance: {fileID: 1001345147}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ea89ef8f9596b54db99900c6f18f9f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.MixingContainer
 --- !u!4 &934080093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2201804614517555458, guid: 8ba262db060684e48863f28dd785931d, type: 3}
@@ -1084,6 +1108,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3815332349463571395, guid: d35b7deaaa3aacb409bf9a3969464658, type: 3}
   m_PrefabInstance: {fileID: 681463825}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1189575858 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 910272230498718336, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
+  m_PrefabInstance: {fileID: 2076527162}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93a302c0cc470f94d8d51953ac37e8e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.IngredientBottle
 --- !u!1 &1197360635
 GameObject:
   m_ObjectHideFlags: 0
