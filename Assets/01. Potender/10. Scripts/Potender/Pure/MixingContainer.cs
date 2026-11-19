@@ -38,6 +38,7 @@ namespace Potender
         readonly Dictionary<IngredientData, float> contents = new();
         readonly List<IngredientData> keyBuffer = new();
         JudgeResult? cachedResult;
+        bool warnedFull;
 
         public IReadOnlyDictionary<IngredientData, float> Contents => contents;
         public float Total { get; private set; }
@@ -51,7 +52,17 @@ namespace Potender
         // ───────── 재료 ─────────
         public void AddIngredient(IngredientData ing, float amount)
         {
-            if (!ing || !CanReceive || amount <= 0f) return;
+            if (!ing || amount <= 0f) return;
+            if (!CanReceive)
+            {
+                if (!warnedFull)
+                {
+                    Debug.Log(LidClosed ? "[Potender] 뚜껑이 닫혀 있어서 재료가 안 들어감" : "[Potender] 쉐이커가 가득 참 — 바닥에 버려서 비우세요");
+                    warnedFull = true;
+                }
+                return;
+            }
+            warnedFull = false;
             amount = Mathf.Min(amount, capacity - Total);
             contents.TryGetValue(ing, out float cur);
             contents[ing] = cur + amount;
@@ -72,13 +83,14 @@ namespace Potender
             if (MixProgress >= 1f)
             {
                 MixedBy = method;
+                Debug.Log($"[Potender] 섞기 완료 ({method})");
                 onMixed?.Invoke();
             }
         }
 
         // ───────── 뚜껑 (Socket Interactor의 Select Entered / Exited에 연결) ─────────
-        public void OnLidAttached() => LidClosed = true;
-        public void OnLidDetached() => LidClosed = false;
+        public void OnLidAttached() { LidClosed = true; Debug.Log("[Potender] 뚜껑 닫힘"); }
+        public void OnLidDetached() { LidClosed = false; Debug.Log("[Potender] 뚜껑 열림"); }
 
         public void Clear()
         {

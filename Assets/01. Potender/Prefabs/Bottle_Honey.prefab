@@ -87,7 +87,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.012
+    widthMultiplier: 0.02
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -509,7 +509,7 @@ MonoBehaviour:
   ingredient: {fileID: 11400000, guid: 192ac1ef79e555e4d857cd873bc802b4, type: 2}
   spout: {fileID: 1102055965728156093}
   pourAngle: 70
-  flowRate: 0.25
+  flowRate: 0.12
   streamLength: 1.2
   pourMask:
     serializedVersion: 2
