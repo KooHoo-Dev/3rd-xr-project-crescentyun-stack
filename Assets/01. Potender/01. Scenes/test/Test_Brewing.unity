@@ -641,11 +641,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 3.008
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 1717954561962503726, guid: f6336ac4ac8b4d34bc5072418cdc62a0, type: 3}
       propertyPath: m_LocalPosition.z
@@ -898,33 +898,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 761926121}
-  - component: {fileID: 761926120}
+  - component: {fileID: 761926122}
   m_Layer: 0
   m_Name: Tester
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &761926120
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 761926119}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02899246938d0c645ac46c15efbaec43, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Potender.BrewingKeyboardTester
-  shaker: {fileID: 810038589}
-  bottles:
-  - {fileID: 240153845}
-  - {fileID: 1189575858}
-  tiltAngle: 120
-  shakeAmplitude: 0.1
-  shakeFrequency: 4
+  m_IsActive: 0
 --- !u!4 &761926121
 Transform:
   m_ObjectHideFlags: 0
@@ -940,6 +921,27 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &761926122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 761926119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 02899246938d0c645ac46c15efbaec43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.BrewingKeyboardTester
+  shaker: {fileID: 810038589}
+  bottles:
+  - {fileID: 240153845}
+  - {fileID: 1189575858}
+  glass: {fileID: 896591671}
+  tiltAngle: 120
+  pourHeight: 0.12
+  shakeAmplitude: 0.1
+  shakeFrequency: 4
 --- !u!114 &810038589 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1108117539480513464, guid: a37fb71296ee3c141a70332a80d324cd, type: 3}
@@ -951,6 +953,74 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ea89ef8f9596b54db99900c6f18f9f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Potender.MixingContainer
+--- !u!114 &896591671 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6571960420569254721, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+  m_PrefabInstance: {fileID: 923413842}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80746d1df2e3099469ec94b8eef33e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.ServingGlass
+--- !u!1001 &923413842
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.80218
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.93
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1.91
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1979326238865626154, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6151822203420875133, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
+      propertyPath: m_Name
+      value: Serving_Glass
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: e007af1775034aa79c43ce57fcba390e, type: 3}
 --- !u!4 &934080093 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2201804614517555458, guid: 8ba262db060684e48863f28dd785931d, type: 3}
@@ -968,6 +1038,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cocktail_Shaker
       objectReference: {fileID: 0}
+    - target: {fileID: 1108117539480513464, guid: a37fb71296ee3c141a70332a80d324cd, type: 3}
+      propertyPath: explosionPrefab
+      value: 
+      objectReference: {fileID: 41059563313066386, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
     - target: {fileID: 2539746989622288612, guid: a37fb71296ee3c141a70332a80d324cd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 3.38897
@@ -1866,7 +1940,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1297382348420137599, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.965
+      value: 1.03
       objectReference: {fileID: 0}
     - target: {fileID: 1297382348420137599, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2447,7 +2521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1297382348420137599, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.965
+      value: 1.03
       objectReference: {fileID: 0}
     - target: {fileID: 1297382348420137599, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2490,6 +2564,63 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 239f16a23dd67cc48948ef4e3ec1873e, type: 3}
+--- !u!1001 &7228956357610620171
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 41059563313066386, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_Name
+      value: Fx_Explosion
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.80218
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.45094
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 2.7472
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8827371719552506633, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b33bbdc5062999f4cac2429a3271e2fa, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -2504,3 +2635,5 @@ SceneRoots:
   - {fileID: 465915776}
   - {fileID: 414868441}
   - {fileID: 761926121}
+  - {fileID: 7228956357610620171}
+  - {fileID: 923413842}
