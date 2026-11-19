@@ -22,5 +22,9 @@ namespace Potender
         public MixMethod method = MixMethod.Shake;
         public Color potionColor = Color.magenta;
         public bool isAttackPotion;
+
+        [Header("Day 3 — 손님 주문 대사 (포션당 2개)")]
+        [Tooltip("손님이 이 포션을 원할 때 하는 말. 포션 이름은 직접 말하지 않게!")]
+        [TextArea(2, 3)] public List<string> orderLines = new();
     }
 }
