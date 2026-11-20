@@ -33,7 +33,7 @@ namespace Potender
         {
             float total = 0f;
             foreach (var kv in contents) total += kv.Value;
-            if (total < minTotal) return JudgeResult.Fail(null, "양이 부족함");
+            if (total < minTotal) return JudgeResult.Fail(null, "양 부족: 재료를 더 넣으세요");
 
             present.Clear();
             foreach (var kv in contents)
@@ -51,14 +51,23 @@ namespace Potender
                     float want = ri.parts / partsSum;
                     float got = contents[ri.ingredient] / total;
                     if (Mathf.Abs(want - got) > ratioTolerance)
-                        return JudgeResult.Fail(recipe, $"{ri.ingredient.displayName} 비율이 맞지 않음");
+                        return JudgeResult.Fail(recipe, $"비율 실패: {ri.ingredient.displayName} 양이 맞지 않음");
                 }
 
-                if (method == MixMethod.None) return JudgeResult.Fail(recipe, "섞지 않음");
-                if (method != recipe.method) return JudgeResult.Fail(recipe, "제조법이 다름");
+                if (method == MixMethod.None)
+                    return JudgeResult.Fail(recipe, recipe.method == MixMethod.Stir ? "젓기 부족: 바 스푼으로 더 저으세요" : "흔들기 부족: 뚜껑 닫고 더 흔드세요");
+                if (method != recipe.method)
+                    return JudgeResult.Fail(recipe, $"제조법 실패: {recipe.potionName}은(는) {(recipe.method == MixMethod.Stir ? "젓기" : "흔들기")}로 만들어야 함");
                 return JudgeResult.Ok(recipe);
             }
-            return JudgeResult.Fail(null, "알 수 없는 조합");
+            return JudgeResult.Fail(null, $"레시피 실패: {PresentNames()} 조합은 메뉴에 없음");
+        }
+
+        string PresentNames()
+        {
+            var names = new List<string>();
+            foreach (var i in present) names.Add(i.displayName);
+            return names.Count > 0 ? string.Join(" + ", names) : "아무것도 없는";
         }
 
         bool SameSet(RecipeData recipe)

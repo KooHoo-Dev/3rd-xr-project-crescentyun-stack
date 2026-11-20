@@ -6,8 +6,9 @@ using UnityEngine.XR.Interaction.Toolkit.Interactors;
 namespace Potender
 {
     /// <summary>
-    /// 카운터 자리 하나 = 손님 서는 위치 + 서빙 소켓.
-    /// 포션이 담긴 잔이 소켓에 놓이고 (가득 찼거나 / 잠시 그대로 있으면) 이 자리 손님에게 서빙.
+    /// 카운터 자리 하나 = 손님 서는 위치 + 서빙 트레이(소켓).
+    /// A) 손님이 주문한 '뒤에' 트레이에 놓은(또는 채운) 잔만 받아감 → 미리 올려둔 잔은 들었다 다시 놓아야 함
+    /// C) 손님이 서빙 없이 떠나면(시간 초과/마감) 트레이 위 잔을 비워서 제자리로
     /// 서빙 후 잔은 비워서 원래 자리로 돌려보냄(ReturnToHome).
     /// </summary>
     public class CounterSpot : MonoBehaviour
@@ -15,18 +16,20 @@ namespace Potender
         [Tooltip("손님이 서는 위치. 파란 화살표(forward)가 플레이어 쪽을 보게")]
         [SerializeField] Transform standPoint;
         [SerializeField] XRSocketInteractor serveSocket;
-        [Tooltip("덜 찬 잔은 이 시간 동안 양이 안 변하면 서빙 (소켓에 둔 채 따르는 중이면 대기)")]
+        [Tooltip("덜 찬 잔은 이 시간 동안 양이 안 변하면 서빙 (트레이에 둔 채 따르는 중이면 대기)")]
         [SerializeField] float settleTime = 0.5f;
         [Tooltip("손님이 잔을 받아가는 연출 시간")]
         [SerializeField] float takeDelay = 0.8f;
+        [Tooltip("손님이 그냥 떠났을 때 트레이 위 잔을 치우기까지 시간")]
+        [SerializeField] float clearDelay = 1.0f;
 
         public Transform StandPoint => standPoint ? standPoint : transform;
         public Customer Current { get; set; }
         public bool IsFree => !Current;
 
         ServingGlass glass;
-        float lastFill, stillTimer;
-        bool busy;
+        float placedTime, lastFill, stillTimer;
+        bool busy, wasWaiting;
 
         void OnEnable()
         {
@@ -45,6 +48,7 @@ namespace Potender
         void OnPlaced(SelectEnterEventArgs args)
         {
             glass = args.interactableObject.transform.GetComponentInParent<ServingGlass>();
+            placedTime = Time.time;
             stillTimer = 0f;
             if (glass) lastFill = glass.Fill;
         }
@@ -57,22 +61,33 @@ namespace Potender
 
         void Update()
         {
+            bool waiting = Current && Current.IsWaiting;
+
+            // C) 손님이 서빙 없이 떠남 → 트레이 정리
+            if (wasWaiting && !waiting && !busy && glass && glass.Potion)
+                StartCoroutine(TakeAway(glass, clearDelay, null));
+            wasWaiting = waiting;
+
             if (!glass || busy) return;
 
             if (!Mathf.Approximately(glass.Fill, lastFill)) stillTimer = 0f;
             else stillTimer += Time.deltaTime;
             lastFill = glass.Fill;
 
+            if (!waiting || !GameFlow.Instance) return;
             bool ready = glass.Potion && (glass.IsFull || stillTimer >= settleTime);
-            if (ready && Current && Current.IsWaiting && GameFlow.Instance)
-                StartCoroutine(ServeRoutine(glass));
+            // A) 주문 이후에 놓았거나 채운 잔만
+            bool fresh = Mathf.Max(placedTime, glass.LastFillTime) >= Current.WaitingSince;
+            if (ready && fresh)
+                StartCoroutine(TakeAway(glass, takeDelay, Current));
         }
 
-        IEnumerator ServeRoutine(ServingGlass g)
+        /// <summary>customer가 있으면 서빙 판정 후 회수, 없으면 그냥 회수</summary>
+        IEnumerator TakeAway(ServingGlass g, float delay, Customer customer)
         {
             busy = true;
-            GameFlow.Instance.Serve(Current, g.Potion);
-            yield return new WaitForSeconds(takeDelay);
+            if (customer) GameFlow.Instance.Serve(customer, g.Potion);
+            yield return new WaitForSeconds(delay);
 
             // 소켓에서 빼고 → 비우고 → 제자리로
             serveSocket.socketActive = false;

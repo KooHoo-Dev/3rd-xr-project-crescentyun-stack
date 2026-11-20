@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Potender.RecipeBook
   recipes:
   - {fileID: 11400000, guid: d0319af95c23d9244a94544ee91b04bc, type: 2}
+  - {fileID: 11400000, guid: d78c8176031368140b8a81d3a710ffc0, type: 2}
+  - {fileID: 11400000, guid: 797dda02c9461f94492155b3e6318964, type: 2}
+  - {fileID: 11400000, guid: e6b7479589b48e141882a3935893b0ec, type: 2}
   ignoreShare: 0.08
   ratioTolerance: 1
   minTotal: 0.3

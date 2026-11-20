@@ -9,6 +9,9 @@ namespace Potender
     {
         [SerializeField] float capacity = 0.4f;
         [SerializeField] LiquidVisual liquid;
+        [Tooltip("이 각도 이상 기울이면 내용물을 쏟아 버림 (잘못 만든 포션 버리기)")]
+        [SerializeField] float discardAngle = 100f;
+        [SerializeField] float discardRate = 0.6f;
 
         public UnityEvent onFilled;
         public event Action<ServingGlass> Filled;
@@ -24,6 +27,7 @@ namespace Potender
 
             Potion = recipe;
             Fill = Mathf.Min(capacity, Fill + amount);
+            LastFillTime = Time.time;
             if (liquid) liquid.SetTarget(recipe.potionColor, Fill / capacity);
 
             if (IsFull)
@@ -31,6 +35,18 @@ namespace Potender
                 onFilled?.Invoke();
                 Filled?.Invoke(this);
             }
+        }
+
+        /// <summary>마지막으로 양이 바뀐 시각 (서빙 판단용)</summary>
+        public float LastFillTime { get; private set; }
+
+        void Update()
+        {
+            if (Fill <= 0f || !PourUtil.IsTilted(transform, discardAngle)) return;
+            Fill -= discardRate * Time.deltaTime;
+            LastFillTime = Time.time;
+            if (Fill <= 0.001f) { Clear(); return; }
+            if (liquid && Potion) liquid.SetTarget(Potion.potionColor, Fill / capacity);
         }
 
         public void Clear()

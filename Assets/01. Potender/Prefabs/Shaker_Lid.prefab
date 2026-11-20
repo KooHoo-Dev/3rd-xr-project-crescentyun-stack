@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8814237158517167456}
   - component: {fileID: 4880283821124169040}
   - component: {fileID: 3699411224642237442}
+  - component: {fileID: 7668107670621812828}
   m_Layer: 0
   m_Name: Shaker_Lid
   m_TagString: Untagged
@@ -272,3 +273,21 @@ MonoBehaviour:
   m_LimitAngularVelocity: 0
   m_MaxLinearVelocityDelta: 10
   m_MaxAngularVelocityDelta: 20
+--- !u!114 &7668107670621812828
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3513071379190433056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ddca4c6e3e4f2f74d90eda843c40def4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.ReturnToHome
+  dropDistance: 0.5
+  returnDelay: 1.5
+  returnWhenTipped: 0
+  tipAngle: 70
+  tipDelay: 3
+  homeAnchor: {fileID: 0}

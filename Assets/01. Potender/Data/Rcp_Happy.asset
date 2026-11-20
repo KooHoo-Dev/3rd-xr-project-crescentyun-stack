@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6fdc1096a2464c9abe52650e8c920850, type: 3}
   m_Name: Rcp_Happy
   m_EditorClassIdentifier: Assembly-CSharp::Potender.RecipeData
-  potionName: "\uD589\uBCF5"
-  effectDescription: 
+  potionName: "\uD589\uBCF5 \uD3EC\uC158"
+  effectDescription: "\uAE30\uBD84\uC774 \uC88B\uC544\uC9C4\uB2E4"
   ingredients:
   - ingredient: {fileID: 11400000, guid: 8aa87b541a0b71b44b9095027f0aa59a, type: 2}
     parts: 1
@@ -22,3 +22,7 @@ MonoBehaviour:
   method: 1
   potionColor: {r: 1, g: 0, b: 1, a: 1}
   isAttackPotion: 0
+  orderLines:
+  - "\uC624\uB298 \uB108\uBB34 \uC6B0\uC6B8\uD574\u2026\n\uAE30\uBD84 \uC88B\uC544\uC9C0\uB294
+    \uAC78\uB85C \uC918"
+  - "\uC2E4\uC5F0\uB2F9\uD588\uC5B4.\n\uC6C3\uACE0 \uC2F6\uB2E4\u2026"

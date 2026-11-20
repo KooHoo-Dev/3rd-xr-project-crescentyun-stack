@@ -1,4 +1,4 @@
-
+using TMPro;
 using UnityEngine;
 
 namespace Potender
@@ -17,7 +17,38 @@ namespace Potender
         [SerializeField] LayerMask pourMask = ~0;
         [SerializeField] PourStream stream;
 
+        [Header("재료 구분 표시")]
+        [Tooltip("재료 색으로 칠할 렌더러 (병 몸통)")]
+        [SerializeField] Renderer[] tintRenderers;
+        [Tooltip("URP Lit = _BaseColor, Built-in = _Color")]
+        [SerializeField] string colorProperty = "_BaseColor";
+        [Tooltip("병 위에 뜨는 재료 이름")]
+        [SerializeField] TMP_Text label;
+
+        public IngredientData Ingredient => ingredient;
         public bool IsPouring { get; private set; }
+
+        void Start()
+        {
+            ApplyTint();
+            if (label && ingredient) label.text = ingredient.displayName;
+        }
+
+        void OnValidate() => ApplyTint();
+
+        void ApplyTint()
+        {
+            if (!ingredient || tintRenderers == null) return;
+            var mpb = new MaterialPropertyBlock();
+            int id = Shader.PropertyToID(colorProperty);
+            foreach (var r in tintRenderers)
+            {
+                if (!r) continue;
+                r.GetPropertyBlock(mpb);
+                mpb.SetColor(id, ingredient.liquidColor);
+                r.SetPropertyBlock(mpb);
+            }
+        }
 
         void Update()
         {

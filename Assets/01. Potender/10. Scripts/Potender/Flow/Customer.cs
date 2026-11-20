@@ -45,6 +45,8 @@ namespace Potender
         public RecipeData Order { get; private set; }
         public string OrderLine { get; private set; }
         public bool IsWaiting => phase == Phase.Waiting;
+        /// <summary>자리에 도착해서 주문한 시각 (Time.time)</summary>
+        public float WaitingSince { get; private set; } = float.MaxValue;
         public float Patience01 => flow ? Mathf.Clamp01(patience / flow.PatienceSeconds) : 1f;
 
         public void Init(GameFlow flow, CounterSpot spot, RecipeData order, string line, Color tint, Transform exit)
@@ -105,6 +107,7 @@ namespace Potender
         void Arrive()
         {
             phase = Phase.Waiting;
+            WaitingSince = Time.time;
             SetWalking(false);
             if (bubble) bubble.SetActive(true);
             if (bubbleText) bubbleText.text = OrderLine;

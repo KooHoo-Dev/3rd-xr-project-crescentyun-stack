@@ -39,6 +39,7 @@ namespace Potender
         readonly List<IngredientData> keyBuffer = new();
         JudgeResult? cachedResult;
         bool warnedFull;
+        bool mixWasReset; // 섞은 뒤 재료를 더 넣어서 진행도가 0이 됨
 
         public IReadOnlyDictionary<IngredientData, float> Contents => contents;
         public float Total { get; private set; }
@@ -69,6 +70,7 @@ namespace Potender
             Total += amount;
 
             // 재료를 더 넣으면 다시 섞어야 함
+            if (MixProgress > 0f) mixWasReset = true;
             MixProgress = 0f;
             MixedBy = MixMethod.None;
             cachedResult = null;
@@ -83,6 +85,7 @@ namespace Potender
             if (MixProgress >= 1f)
             {
                 MixedBy = method;
+                mixWasReset = false;
                 Debug.Log($"[Potender] 섞기 완료 ({method})");
                 onMixed?.Invoke();
             }
@@ -99,6 +102,7 @@ namespace Potender
             MixProgress = 0f;
             MixedBy = MixMethod.None;
             cachedResult = null;
+            mixWasReset = false;
             RefreshVisual();
         }
 
@@ -136,6 +140,8 @@ namespace Potender
             var r = recipeBook
                 ? recipeBook.Evaluate(contents, MixedBy)
                 : JudgeResult.Fail(null, "RecipeBook 미지정");
+            if (!r.success && MixedBy == MixMethod.None && mixWasReset)
+                r.reason += "\n(섞은 뒤 재료를 더 넣어서 섞기가 초기화됨)";
 
             Debug.Log($"[Potender 판정] {(r.success ? "성공" : "실패")} / {(r.recipe ? r.recipe.potionName : "-")} / {r.reason}");
             Judged?.Invoke(r);

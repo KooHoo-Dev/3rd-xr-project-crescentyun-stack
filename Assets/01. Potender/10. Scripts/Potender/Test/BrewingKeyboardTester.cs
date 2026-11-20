@@ -11,7 +11,7 @@ namespace Potender
     ///  L                  : 뚜껑 빼기 / 끼우기 (실제 Shaker_Lid를 소켓에서 빼고 넣음)
     ///  Space (누르고 있기) : 쉐이커 위아래로 흔들기
     ///  P (누르고 있기)     : 쉐이커를 서빙 잔 위로 옮겨서 따르기 (Glass 슬롯 비우면 제자리에서 기울임)
-    /// ※ Play 시 병/쉐이커 Rigidbody를 자동으로 Kinematic으로 바꿈. VR 테스트할 땐 이 오브젝트 끄기!
+    /// ※ Play 시 병/쉐이커 Rigidbody를 자동으로 Kinematic으로 바꿈. 에디터에서만 동작 (실기기 빌드에선 자동 비활성)
     /// </summary>
     public class BrewingKeyboardTester : MonoBehaviour
     {
@@ -33,6 +33,9 @@ namespace Potender
 
         void Start()
         {
+            // 실기기(Quest)에선 자동으로 꺼짐 → VR 빌드 전에 끄는 걸 깜빡해도 안전
+            if (!Application.isEditor) { enabled = false; return; }
+
             if (shaker)
             {
                 shakerHome = shaker.transform.position;

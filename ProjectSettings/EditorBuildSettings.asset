@@ -5,13 +5,16 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
+  - enabled: 1
+    path: Assets/01. Potender/01. Scenes/test/Main.unity
+    guid: c84f7c6bc29685c46b8b37ab9bf917f6
   - enabled: 0
     path: Assets/01. Potender/01. Scenes/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
   - enabled: 0
     path: Assets/01. Potender/01. Scenes/test/Test.unity
     guid: 206c247429528dd4a8fd73d3e56dbb5c
-  - enabled: 1
+  - enabled: 0
     path: Assets/01. Potender/01. Scenes/test/Test_Brewing.unity
     guid: b4b3f45d42d065a439556ed2215c8541
   m_configObjects:
