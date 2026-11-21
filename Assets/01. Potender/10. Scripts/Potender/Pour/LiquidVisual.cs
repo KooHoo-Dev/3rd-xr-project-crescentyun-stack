@@ -36,6 +36,14 @@ namespace Potender
             if (currentFill <= 0.001f) current = color; // 빈 용기에 첫 재료: 색은 바로
         }
 
+        /// <summary>보간 없이 즉시 목표 상태로 (잔이 깨졌다 다시 나타날 때 등)</summary>
+        public void SnapToTarget()
+        {
+            current = target;
+            currentFill = targetFill;
+            Apply();
+        }
+
         void Update()
         {
             float k = 1f - Mathf.Exp(-lerpSpeed * Time.deltaTime);

@@ -72,8 +72,13 @@ namespace Potender
         public UnityEvent onCustomerAngry;
 
         public State Current { get; private set; } = State.Title;
-        /// <summary>Day 4 강도 습격 중엔 true → 손님 인내심 정지</summary>
+        /// <summary>Day 4 강도 습격 중엔 true → 손님 인내심 + 영업 시계 + 손님 스폰 정지</summary>
         public bool PatiencePaused { get; set; }
+        public float DayLength => dayLength;
+        /// <summary>HUD 아래줄에 덧붙는 경고 (강도 습격 카운트다운 등). null이면 안 보임</summary>
+        public string HudAlert { get; set; }
+        /// <summary>정산 화면에 덧붙는 한 줄 (강도 결과)</summary>
+        public string RaidSummary { get; set; }
         public float PatienceSeconds => patienceSeconds;
         public float TimeLeft { get; private set; }
 
@@ -112,6 +117,7 @@ namespace Potender
         {
             if (Current != State.Title) return;
             TotalTips = Served = Wrong = Angry = Explosions = 0;
+            HudAlert = RaidSummary = null;
             TimeLeft = dayLength;
             spawnTimer = firstCustomerDelay;
             Current = State.Open;
@@ -128,6 +134,7 @@ namespace Potender
             switch (Current)
             {
                 case State.Open:
+                    if (PatiencePaused) break; // 강도 습격 중: 시계·스폰 정지
                     TimeLeft -= Time.deltaTime;
                     spawnTimer -= Time.deltaTime;
                     if (spawnTimer <= 0f && TrySpawn())
@@ -198,6 +205,14 @@ namespace Potender
             }
         }
 
+        /// <summary>팁 증감 (강도 보너스/벌금). 0 아래로는 안 내려감. 실제 바뀐 양 반환</summary>
+        public int AddTips(int delta)
+        {
+            int before = TotalTips;
+            TotalTips = Mathf.Max(0, TotalTips + delta);
+            return TotalTips - before;
+        }
+
         public void OnPatienceOut(Customer c)
         {
             Angry++;
@@ -239,7 +254,9 @@ namespace Potender
             sb.Append("<size=140%><b>오늘의 정산</b></size>\n\n");
             sb.Append($"총 팁  <b>{TotalTips} G</b>\n");
             sb.Append($"응대 손님  {Served}명\n");
-            sb.Append($"잘못 서빙  {Wrong}  ·  화나서 떠남  {Angry}  ·  폭발  {Explosions}\n\n");
+            sb.Append($"잘못 서빙  {Wrong}  ·  화나서 떠남  {Angry}  ·  폭발  {Explosions}\n");
+            if (!string.IsNullOrEmpty(RaidSummary)) sb.Append(RaidSummary).Append('\n');
+            sb.Append('\n');
             sb.Append("<size=160%><color=#FFD54A>");
             for (int i = 0; i < starThresholds.Length; i++) sb.Append(i < stars ? starOn : starOff);
             sb.Append("</color></size>");
@@ -259,6 +276,7 @@ namespace Potender
             int t = Mathf.CeilToInt(Mathf.Max(0f, TimeLeft));
             string time = Current == State.Closing ? "<color=#FF7043>마감</color>" : $"{t / 60}:{t % 60:00}";
             hudText.text = $"{time}    팁 {TotalTips}G    손님 {Served}";
+            if (!string.IsNullOrEmpty(HudAlert)) hudText.text += "\n" + HudAlert;
         }
 
         static string Pick(string[] arr) => arr is { Length: > 0 } ? arr[Random.Range(0, arr.Length)] : "";
