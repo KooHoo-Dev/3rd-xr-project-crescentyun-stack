@@ -102,6 +102,7 @@ GameObject:
   - component: {fileID: 7037279159958102312}
   - component: {fileID: 6994607649491980665}
   - component: {fileID: 662218892930419260}
+  - component: {fileID: 5299399278202852875}
   m_Layer: 0
   m_Name: Goblin
   m_TagString: Untagged
@@ -239,6 +240,39 @@ MonoBehaviour:
   onSteal:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &5299399278202852875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467344944982159545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1608ee278d012a64895c7c4e9066ea33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.ModelSwap
+  models:
+  - {fileID: 1793230569793294, guid: 24e2f7a008fde164698a13a05b6918f5, type: 3}
+  hideRenderers:
+  - {fileID: 4166005804693792762}
+  - {fileID: 44306751143263144}
+  - {fileID: 2632318172433748622}
+  - {fileID: 1756760956241998458}
+  - {fileID: 3784873029797188767}
+  targetHeight: 1.25
+  castShadows: 0
+  bobHeight: 0.04
+  bobSpeed: 10
+  bobTilt: 0
+  proceduralPose: 1
+  avatar: {fileID: 9000000, guid: 9d545e43681431348908eab98e78aa45, type: 3}
+  armDown: -0.62
+  forearm: 0.65
+  armSwing: 0.35
+  legSwing: 0.4
+  kneeBend: 0.5
+  strideLength: 0.55
 --- !u!1 &1920404974609442168
 GameObject:
   m_ObjectHideFlags: 0

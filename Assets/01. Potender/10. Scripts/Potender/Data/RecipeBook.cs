@@ -27,9 +27,15 @@ namespace Potender
         [Tooltip("최소 총량(용기 용량 대비 아님, 절대량)")]
         public float minTotal = 0.3f;
 
+        [Header("얼음")]
+        [Tooltip("needsIce 레시피에 필요한 최소 얼음 개수")]
+        [Min(1)] public int minIceCubes = 2;
+        [Tooltip("얼음이 필요 없는 레시피에 얼음을 넣으면 실패. 끄면 그냥 무시")]
+        public bool failOnUnwantedIce = true;
+
         readonly HashSet<IngredientData> present = new();
 
-        public JudgeResult Evaluate(IReadOnlyDictionary<IngredientData, float> contents, MixMethod method)
+        public JudgeResult Evaluate(IReadOnlyDictionary<IngredientData, float> contents, MixMethod method, int iceCubes = 0)
         {
             float total = 0f;
             foreach (var kv in contents) total += kv.Value;
@@ -39,28 +45,40 @@ namespace Potender
             foreach (var kv in contents)
                 if (kv.Value / total >= ignoreShare) present.Add(kv.Key);
 
-            foreach (var recipe in recipes)
+            // 재료 조합이 같은 레시피가 여럿이면(얼음 有/無 버전) 얼음 상태가 맞는 쪽 우선
+            bool hasIce = iceCubes > 0;
+            RecipeData recipe = null;
+            foreach (var r in recipes)
             {
-                if (recipe == null || !SameSet(recipe)) continue;
-
-                float partsSum = 0f;
-                foreach (var ri in recipe.ingredients) partsSum += ri.parts;
-
-                foreach (var ri in recipe.ingredients)
-                {
-                    float want = ri.parts / partsSum;
-                    float got = contents[ri.ingredient] / total;
-                    if (Mathf.Abs(want - got) > ratioTolerance)
-                        return JudgeResult.Fail(recipe, $"비율 실패: {ri.ingredient.displayName} 양이 맞지 않음");
-                }
-
-                if (method == MixMethod.None)
-                    return JudgeResult.Fail(recipe, recipe.method == MixMethod.Stir ? "젓기 부족: 바 스푼으로 더 저으세요" : "흔들기 부족: 뚜껑 닫고 더 흔드세요");
-                if (method != recipe.method)
-                    return JudgeResult.Fail(recipe, $"제조법 실패: {recipe.potionName}은(는) {(recipe.method == MixMethod.Stir ? "젓기" : "흔들기")}로 만들어야 함");
-                return JudgeResult.Ok(recipe);
+                if (r == null || !SameSet(r)) continue;
+                if (r.needsIce == hasIce) { recipe = r; break; }
+                if (!recipe) recipe = r;
             }
-            return JudgeResult.Fail(null, $"레시피 실패: {PresentNames()} 조합은 메뉴에 없음");
+            if (!recipe) return JudgeResult.Fail(null, $"레시피 실패: {PresentNames()} 조합은 메뉴에 없음");
+
+            float partsSum = 0f;
+            foreach (var ri in recipe.ingredients) partsSum += ri.parts;
+
+            foreach (var ri in recipe.ingredients)
+            {
+                float want = ri.parts / partsSum;
+                float got = contents[ri.ingredient] / total;
+                if (Mathf.Abs(want - got) > ratioTolerance)
+                    return JudgeResult.Fail(recipe, $"비율 실패: {ri.ingredient.displayName} 양이 맞지 않음");
+            }
+
+            if (recipe.needsIce && iceCubes < minIceCubes)
+                return JudgeResult.Fail(recipe, iceCubes == 0
+                    ? $"얼음 실패: {recipe.potionName}은(는) 얼음을 {minIceCubes}개 이상 넣어야 함"
+                    : $"얼음 부족: {iceCubes}/{minIceCubes}개 — 얼음을 더 넣으세요");
+            if (!recipe.needsIce && hasIce && failOnUnwantedIce)
+                return JudgeResult.Fail(recipe, $"얼음 실패: {recipe.potionName}에는 얼음을 넣으면 안 됨");
+
+            if (method == MixMethod.None)
+                return JudgeResult.Fail(recipe, recipe.method == MixMethod.Stir ? "젓기 부족: 바 스푼으로 더 저으세요" : "흔들기 부족: 뚜껑 닫고 더 흔드세요");
+            if (method != recipe.method)
+                return JudgeResult.Fail(recipe, $"제조법 실패: {recipe.potionName}은(는) {(recipe.method == MixMethod.Stir ? "젓기" : "흔들기")}로 만들어야 함");
+            return JudgeResult.Ok(recipe);
         }
 
         string PresentNames()

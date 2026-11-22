@@ -20,9 +20,10 @@ MonoBehaviour:
   - ingredient: {fileID: 11400000, guid: 0805a7821ed021241b5207ce66fc6de3, type: 2}
     parts: 1
   method: 1
+  needsIce: 1
   potionColor: {r: 1, g: 0.49771386, b: 0, a: 1}
   isAttackPotion: 0
   orderLines:
+  - "\uBD84\uB178 \uD3EC\uC158 \uD558\uB098 \uC918"
   - "\uC624\uB298 \uACB0\uD22C\uAC00 \uC788\uC5B4!\n\uD53C\uAC00 \uB053\uC5B4\uC624\uB974\uB294
     \uAC78\uB85C!"
-  - "\uAC81\uBA39\uC9C0 \uC54A\uAC8C\n\uD654\uB048\uD55C \uAC70 \uD55C \uC794!"

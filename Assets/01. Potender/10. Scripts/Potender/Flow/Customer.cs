@@ -36,6 +36,8 @@ namespace Potender
         [Tooltip("반응 대사 보여주는 시간")]
         [SerializeField] float reactTime = 2.5f;
 
+        RectTransform uiRoot;
+        Vector3 uiBaseLocal;
         GameFlow flow;
         CounterSpot spot;
         Transform exitPoint;
@@ -72,6 +74,13 @@ namespace Potender
             if (bubble) bubble.SetActive(false);
             if (patienceRoot) patienceRoot.SetActive(false);
             SetWalking(true);
+
+            var canvas = bubble ? bubble.GetComponentInParent<Canvas>(true) : null;
+            if (canvas)
+            {
+                uiRoot = (RectTransform)canvas.transform;
+                uiBaseLocal = uiRoot.localPosition;
+            }
         }
 
         void Update()
@@ -109,6 +118,7 @@ namespace Potender
             phase = Phase.Waiting;
             WaitingSince = Time.time;
             SetWalking(false);
+            ApplyBubbleOffset();
             if (bubble) bubble.SetActive(true);
             if (bubbleText) bubbleText.text = OrderLine;
             if (patienceRoot) patienceRoot.SetActive(true);
@@ -125,6 +135,17 @@ namespace Potender
             if (bubble) bubble.SetActive(true);
             if (bubbleText) bubbleText.text = line;
             // happy 여부로 애니/이펙트를 바꾸고 싶으면 여기서
+        }
+
+        // 옆 자리 손님과 말풍선이 겹치지 않게 (자리가 바라보는 방향 기준으로 로컬 변환)
+        void ApplyBubbleOffset()
+        {
+            if (!uiRoot || spot.BubbleOffset == Vector3.zero) return;
+            Vector3 f = spot.StandPoint.forward; f.y = 0f;
+            if (f.sqrMagnitude < 1e-6f) return;
+            Vector3 local = Quaternion.Inverse(Quaternion.LookRotation(f)) * spot.BubbleOffset;
+            Vector3 s = transform.lossyScale;
+            uiRoot.localPosition = uiBaseLocal + new Vector3(local.x / s.x, local.y / s.y, local.z / s.z);
         }
 
         bool MoveTo(Vector3 target)

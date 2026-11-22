@@ -6,9 +6,9 @@ namespace Potender
 {
     /// <summary>
     /// 강도 습격 (영업 중 1회).
-    ///  발생 → 붉은 조명 + BGM 전환 + 손님 인내심/영업 시계 정지 → 고블린 접근
+    ///  발생 → 붉은 조명 + 손님 인내심/영업 시계 정지 → 고블린 접근
     ///  → 제한 시간 안에 불꽃 포션 명중: 퇴치(보너스) / 실패: 금고 털림(팁 감소)
-    ///  → 잠시 후 조명·BGM 복구, 영업 재개.
+    ///  → 잠시 후 조명 복구, 영업 재개. (사운드 없음)
     /// 씬에 1개. GameFlow와 같은 씬에 두기.
     /// </summary>
     public class RaidEvent : MonoBehaviour
@@ -62,17 +62,6 @@ namespace Potender
         [Tooltip("습격 중에만 켜질 오브젝트 (빨간 포인트 라이트, 경고 문구 등)")]
         [SerializeField] GameObject[] showDuringRaid;
 
-        [Header("사운드 (비워도 됨)")]
-        [Tooltip("평소 BGM (Loop) — 습격 중엔 페이드 아웃")]
-        [SerializeField] AudioSource bgmNormal;
-        [Tooltip("습격 BGM (Loop, Play On Awake 끄기)")]
-        [SerializeField] AudioSource bgmRaid;
-        [Tooltip("효과음용 AudioSource (2D)")]
-        [SerializeField] AudioSource sfx;
-        [SerializeField] AudioClip alarmClip;
-        [SerializeField] AudioClip repelClip;
-        [SerializeField] AudioClip stealClip;
-
         [Header("HUD / 정산 문구")]
         [SerializeField] string hudAlert = "<color=#FF5252><b>고블린 습격!</b>  불꽃 포션을 던져라!  {0}초</color>";
         [SerializeField] string repelText = "<color=#7CFC7C>고블린 퇴치! +{0}G</color>";
@@ -97,7 +86,6 @@ namespace Potender
         Color[] baseColors;
         float[] baseIntensity;
         Color baseAmbient;
-        float bgmNormalVol = 1f, bgmRaidVol = 1f;
 
         void Awake()
         {
@@ -112,8 +100,6 @@ namespace Potender
                 baseIntensity[i] = lights[i].intensity;
             }
             baseAmbient = RenderSettings.ambientLight;
-            if (bgmNormal) bgmNormalVol = bgmNormal.volume;
-            if (bgmRaid) { bgmRaidVol = bgmRaid.volume; bgmRaid.volume = 0f; }
             SetShown(false);
         }
 
@@ -169,8 +155,6 @@ namespace Potender
 
             targetWeight = 1f;
             SetShown(true);
-            if (bgmRaid && !bgmRaid.isPlaying) bgmRaid.Play();
-            PlaySfx(alarmClip);
             onRaidStart?.Invoke();
             Debug.Log("[Potender 강도] 습격 시작");
         }
@@ -181,7 +165,6 @@ namespace Potender
             if (Current != State.Active) return;
             int got = flow ? flow.AddTips(repelBonus) : 0;
             Resolve(string.Format(repelText, got), string.Format(repelSummary, got));
-            PlaySfx(repelClip);
             onRepelled?.Invoke();
             Debug.Log($"[Potender 강도] 퇴치 성공 +{got}G");
         }
@@ -196,7 +179,6 @@ namespace Potender
                 lost = -flow.AddTips(-want);
             }
             Resolve(string.Format(stealText, lost), string.Format(stealSummary, lost));
-            PlaySfx(stealClip);
             onStolen?.Invoke();
             Debug.Log($"[Potender 강도] 금고 털림 -{lost}G");
         }
@@ -235,7 +217,7 @@ namespace Potender
             Debug.Log("[Potender 강도] 종료 — 영업 재개");
         }
 
-        // ───────── 조명 / BGM ─────────
+        // ───────── 조명 ─────────
         void UpdateLighting()
         {
             float step = fadeTime > 0f ? Time.deltaTime / fadeTime : 1f;
@@ -253,24 +235,12 @@ namespace Potender
                 l.intensity = baseIntensity[i] * Mathf.Lerp(1f, raidIntensity, weight) * pulse;
             }
             if (tintAmbient) RenderSettings.ambientLight = Color.Lerp(baseAmbient, raidAmbient, weight);
-
-            if (bgmNormal) bgmNormal.volume = bgmNormalVol * (1f - weight);
-            if (bgmRaid)
-            {
-                bgmRaid.volume = bgmRaidVol * weight;
-                if (weight <= 0f && targetWeight <= 0f && bgmRaid.isPlaying) bgmRaid.Stop();
-            }
         }
 
         void SetShown(bool on)
         {
             if (showDuringRaid == null) return;
             foreach (var go in showDuringRaid) if (go) go.SetActive(on);
-        }
-
-        void PlaySfx(AudioClip clip)
-        {
-            if (sfx && clip) sfx.PlayOneShot(clip);
         }
 
         static Vector3 Flat(Vector3 v) { v.y = 0f; return v; }

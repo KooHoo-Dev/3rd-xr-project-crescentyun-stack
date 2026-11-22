@@ -18,6 +18,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 797dda02c9461f94492155b3e6318964, type: 2}
   - {fileID: 11400000, guid: e6b7479589b48e141882a3935893b0ec, type: 2}
   - {fileID: 11400000, guid: eaeb44c6e95eaef4fac19928ea4e7e3c, type: 2}
+  - {fileID: 11400000, guid: 2d92dabd832490e4ca4bc72970c34388, type: 2}
+  - {fileID: 11400000, guid: d3c964b4454455944836cf6094ffd100, type: 2}
+  - {fileID: 11400000, guid: 360a2ea7c344021438c3c576a6df086f, type: 2}
+  - {fileID: 11400000, guid: e4f28101c02524949859dd2cc0ef307f, type: 2}
+  - {fileID: 11400000, guid: 452772f143bb735498643ecd7bafc0b7, type: 2}
   ignoreShare: 0.08
   ratioTolerance: 1
   minTotal: 0.3
+  minIceCubes: 2
+  failOnUnwantedIce: 1

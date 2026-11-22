@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fdc1096a2464c9abe52650e8c920850, type: 3}
+  m_Name: Rcp_Mana
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.RecipeData
+  potionName: "\uB9C8\uB098 \uD3EC\uC158"
+  effectDescription: "\uB9C8\uB098\uAC00 \uCC28\uC624\uB978\uB2E4"
+  ingredients:
+  - ingredient: {fileID: 11400000, guid: 8aa87b541a0b71b44b9095027f0aa59a, type: 2}
+    parts: 1
+  - ingredient: {fileID: 11400000, guid: 15ca9f58e0b291c40803c2bfd6a31ce9, type: 2}
+    parts: 1
+  method: 1
+  needsIce: 1
+  potionColor: {r: 0.25098038, g: 0.2815444, b: 1, a: 1}
+  isAttackPotion: 0
+  orderLines:
+  - "\uB9C8\uB098 \uD3EC\uC158 \uD558\uB098 \uC918\uBD10"
+  - "\uB9C8\uB098 \uD68C\uBCF5\uC5D0 \uB3C4\uC6C0 \uB418\uB294\uAC70 \uC904\uB798?"

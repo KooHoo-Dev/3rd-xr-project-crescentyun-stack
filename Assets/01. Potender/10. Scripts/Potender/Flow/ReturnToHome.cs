@@ -21,7 +21,11 @@ namespace Potender
         [Header("고정 위치 대신 따라갈 기준 (예: 뚜껑 → 쉐이커의 LidSocket)")]
         [SerializeField] Transform homeAnchor;
 
+        [Tooltip("homeAnchor(뚜껑 → 쉐이커)가 있을 땐 '쓰러짐'으로는 안 돌아감 (뚜껑을 옆으로 눕혀 두는 건 정상). 바닥에 떨어졌을 때만")]
+        [SerializeField] bool anchorOnlyWhenFallen = true;
+
         Vector3 homePos;
+        MixingContainer anchorContainer;
         Quaternion homeRot;
         Rigidbody rb;
         XRBaseInteractable interactable;
@@ -33,6 +37,7 @@ namespace Potender
             homeRot = transform.rotation;
             rb = GetComponent<Rigidbody>();
             interactable = GetComponent<XRBaseInteractable>();
+            if (homeAnchor) anchorContainer = homeAnchor.GetComponentInParent<MixingContainer>();
         }
 
         void Update()
@@ -42,9 +47,12 @@ namespace Potender
             bool fallen = !held && transform.position.y < HomePos.y - dropDistance;
             fallenTimer = fallen ? fallenTimer + Time.deltaTime : 0f;
 
-            bool tipped = returnWhenTipped && !held && Vector3.Angle(transform.up, Vector3.up) > tipAngle
+            bool tipped = returnWhenTipped && !held && !(homeAnchor && anchorOnlyWhenFallen) && Vector3.Angle(transform.up, Vector3.up) > tipAngle
                           && (!rb || rb.linearVelocity.sqrMagnitude < 0.01f);
             tippedTimer = tipped ? tippedTimer + Time.deltaTime : 0f;
+
+            // 쉐이커가 따르는 중이거나 기울어져 있으면 뚜껑을 씌우지 않고 기다림
+            if (anchorContainer && (anchorContainer.IsPouring || PourUtil.IsTilted(anchorContainer.transform, 45f))) return;
 
             if (fallenTimer >= returnDelay || tippedTimer >= tipDelay) Return();
         }

@@ -26,6 +26,8 @@ namespace Potender
         public Transform StandPoint => standPoint ? standPoint : transform;
         public Customer Current { get; set; }
         public bool IsFree => !Current;
+        /// <summary>손님 말풍선을 옆으로 미는 양 (월드). 자리가 여러 개면 GameFlow가 자동 계산</summary>
+        public Vector3 BubbleOffset { get; set; }
 
         ServingGlass glass;
         float placedTime, lastFill, stillTimer;

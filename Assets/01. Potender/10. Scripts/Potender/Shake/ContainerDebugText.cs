@@ -20,6 +20,7 @@ namespace Potender
             sb.Append($"총량 {container.Total:0.00}/{container.Capacity:0.00}  뚜껑 {(container.LidClosed ? "닫힘" : "열림")}\n");
             foreach (var kv in container.Contents)
                 sb.Append($"· {kv.Key.displayName} {kv.Value / Mathf.Max(container.Total, 0.0001f):P0}\n");
+            sb.Append($"얼음 {container.IceCount}/{container.MaxIce}\n");
             sb.Append($"섞기 {container.MixProgress:P0} ({container.MixedBy})");
             if (shake) sb.Append($"\n속도 {shake.CurrentSpeed:0.0} m/s {(shake.IsShaking ? "◀ 흔드는 중" : "")}");
             text.text = sb.ToString();

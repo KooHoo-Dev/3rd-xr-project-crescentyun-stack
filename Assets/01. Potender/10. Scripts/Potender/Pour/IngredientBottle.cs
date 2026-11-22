@@ -27,6 +27,10 @@ namespace Potender
 
         public IngredientData Ingredient => ingredient;
         public bool IsPouring { get; private set; }
+        /// <summary>붓는 양 0~1 (PourFx 기울기 연출 꺼져 있으면 붓는 동안 1)</summary>
+        public float Flow01 { get; private set; }
+
+        readonly Vector3[] path = new Vector3[32];
 
         void Start()
         {
@@ -52,20 +56,26 @@ namespace Potender
 
         void Update()
         {
-            IsPouring = ingredient && spout && PourUtil.IsTilted(transform, pourAngle);
-            if (!IsPouring) { if (stream) stream.Hide(); return; }
+            float angle = PourUtil.TiltAngle(transform);
+            IsPouring = ingredient && spout && angle >= pourAngle;
+            if (!IsPouring) { Flow01 = 0f; if (stream) stream.Hide(); return; }
 
-            Vector3 from = spout.position;
-            Vector3 to = from + Vector3.down * streamLength;
+            Flow01 = PourFx.FlowFor(angle, pourAngle);
+            Vector3 v0 = PourFx.ExitVelocity(transform, Flow01);
+            bool hitAny = PourUtil.Trace(transform, spout.position, v0, streamLength, pourMask, path, out int n, out var hit);
 
-            if (PourUtil.CastDown(transform, from, streamLength, pourMask, out var hit))
+            MixingContainer container = null;
+            if (hitAny)
             {
-                to = hit.point;
-                var container = hit.collider.GetComponentInParent<MixingContainer>();
-                if (container) container.AddIngredient(ingredient, flowRate * Time.deltaTime);
+                container = hit.collider.GetComponentInParent<MixingContainer>();
+                if (container)
+                {
+                    container.AddIngredient(ingredient, flowRate * Flow01 * Time.deltaTime);
+                    MixingContainer.PourIntoLiquid(container.Liquid, ref n, ref hit, ingredient.liquidColor, Flow01, path);
+                }
             }
 
-            if (stream) stream.Show(from, to, ingredient.liquidColor);
+            if (stream) stream.Show(path, n, ingredient.liquidColor, Flow01, hitAny, hit, !container);
         }
     }
 }

@@ -363,6 +363,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6229609971439381022}
   - component: {fileID: 1717149582677421683}
+  - component: {fileID: 7832477620823769341}
   m_Layer: 0
   m_Name: Customer
   m_TagString: Untagged
@@ -416,6 +417,47 @@ MonoBehaviour:
   patienceFull: {r: 0.4, g: 0.9, b: 0.4, a: 1}
   patienceEmpty: {r: 0.95, g: 0.3, b: 0.25, a: 1}
   reactTime: 2.5
+--- !u!114 &7832477620823769341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4386211523277949497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1608ee278d012a64895c7c4e9066ea33, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Potender.ModelSwap
+  models:
+  - {fileID: 1052137612577496, guid: b3a21033f5e25ef47a403070d1d96983, type: 3}
+  - {fileID: 1193453721025546, guid: 8d458e1bc503f3b4d89e72e841681909, type: 3}
+  - {fileID: 1841705985760018, guid: 4f671f96ada2b43438b517dbc501e523, type: 3}
+  - {fileID: 1682917823560798, guid: f9d0bec09311bef48aa1fb044570e5de, type: 3}
+  - {fileID: 1107688374796108, guid: a129c7755e4c7d843b98bfa2af4b3fb2, type: 3}
+  - {fileID: 1996767962855262, guid: e0331453113676149a9c0b2bc03e60de, type: 3}
+  - {fileID: 1807343888332558, guid: 989e70245d7d4924d8758338bd26804a, type: 3}
+  - {fileID: 1492352555855718, guid: 8549abe3859269745a95380e270df83e, type: 3}
+  - {fileID: 1741276027538082, guid: 767b276e5b6e4b14bbcd51b5a6e78ca8, type: 3}
+  - {fileID: 1074668445682794, guid: 128d74125a472834991824f3f72198b5, type: 3}
+  - {fileID: 1116677665208918, guid: e11051163540ebf4884417f50c226d1c, type: 3}
+  hideRenderers:
+  - {fileID: 3361636545862147934}
+  - {fileID: 2404842083925510087}
+  - {fileID: 4963152796736309614}
+  targetHeight: 1.7
+  castShadows: 0
+  bobHeight: 0.04
+  bobSpeed: 10
+  bobTilt: 0
+  proceduralPose: 1
+  avatar: {fileID: 9000000, guid: 9d545e43681431348908eab98e78aa45, type: 3}
+  armDown: -0.62
+  forearm: 0.65
+  armSwing: 0.35
+  legSwing: 0.4
+  kneeBend: 0.5
+  strideLength: 0.55
 --- !u!1 &4519756600575841899
 GameObject:
   m_ObjectHideFlags: 0

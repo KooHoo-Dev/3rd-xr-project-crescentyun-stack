@@ -17,6 +17,7 @@ namespace Potender
         public event Action<ServingGlass> Filled;
 
         public RecipeData Potion { get; private set; }
+        public LiquidVisual Liquid => liquid;
         public float Fill { get; private set; }
         public bool IsFull => Fill >= capacity * 0.95f;
 

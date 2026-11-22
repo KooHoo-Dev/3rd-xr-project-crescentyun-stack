@@ -26,6 +26,8 @@ namespace Potender
         [SerializeField] Transform entrance;
         [Tooltip("손님이 나가는 곳. 비우면 입구로 나감")]
         [SerializeField] Transform exit;
+        [Tooltip("자리가 여러 개일 때 옆 손님 말풍선 사이 최소 간격 (m) — 겹치면 바깥쪽으로 밀어냄")]
+        [SerializeField] float bubbleGap = 0.06f;
         [Tooltip("손님 색 바리에이션")]
         [SerializeField] Color[] customerColors =
         {
@@ -107,10 +109,50 @@ namespace Potender
             // 폭발 횟수 집계 (씬의 모든 쉐이커/글라스)
             foreach (var c in FindObjectsByType<MixingContainer>(FindObjectsSortMode.None))
                 c.Judged += r => { if (!r.success && Current == State.Open) Explosions++; };
+            AutoBubbleOffsets();
             ShowPanels();
         }
 
         void OnDestroy() { if (Instance == this) Instance = null; }
+
+        /// <summary>
+        /// 자리 2개 이상: 플레이어가 볼 때 좌우로 정렬 → 말풍선 폭이 자리 간격보다 넓으면
+        /// 왼쪽 자리는 왼쪽으로, 오른쪽 자리는 오른쪽으로 밀어서 안 겹치게
+        /// </summary>
+        void AutoBubbleOffsets()
+        {
+            var list = new List<CounterSpot>();
+            foreach (var s in spots) if (s) list.Add(s);
+            if (list.Count < 2 || !customerPrefab) return;
+
+            var canvas = customerPrefab.GetComponentInChildren<Canvas>(true);
+            if (!canvas) return;
+            var rt = (RectTransform)canvas.transform;
+            float width = rt.sizeDelta.x * rt.localScale.x * customerPrefab.transform.localScale.x;
+
+            var cam = Camera.main;
+            Vector3 right = cam ? cam.transform.right : list[0].StandPoint.right;
+            right.y = 0f;
+            right = right.sqrMagnitude > 1e-6f ? right.normalized : Vector3.right;
+
+            Vector3 center = Vector3.zero;
+            foreach (var s in list) center += s.StandPoint.position;
+            center /= list.Count;
+
+            list.Sort((a, b) => Vector3.Dot(a.StandPoint.position, right).CompareTo(Vector3.Dot(b.StandPoint.position, right)));
+            float minGap = float.MaxValue;
+            for (int i = 1; i < list.Count; i++)
+                minGap = Mathf.Min(minGap, Vector3.Dot(list[i].StandPoint.position - list[i - 1].StandPoint.position, right));
+
+            float push = Mathf.Max(0f, (width + bubbleGap - minGap) * 0.5f);
+            if (push <= 0f) return;
+            foreach (var s in list)
+            {
+                float side = Mathf.Sign(Vector3.Dot(s.StandPoint.position - center, right));
+                s.BubbleOffset = right * (side * push);
+            }
+            Debug.Log($"[Potender] 말풍선 폭 {width:0.00}m · 자리 간격 {minGap:0.00}m → 좌우로 {push:0.00}m씩 벌림");
+        }
 
         // ───────── 버튼 ─────────
         public void StartGame()
@@ -173,11 +215,26 @@ namespace Potender
             return true;
         }
 
+        // RecipeData.orderWeight 가중치 랜덤 (직전 주문은 제외)
         RecipeData PickOrder()
         {
             if (orderable.Count == 1) return orderable[0];
-            RecipeData r;
-            do r = orderable[Random.Range(0, orderable.Count)]; while (r == lastOrder);
+            float sum = 0f;
+            foreach (var o in orderable) if (o != lastOrder) sum += Mathf.Max(0f, o.orderWeight);
+
+            RecipeData r = null;
+            if (sum > 0f)
+            {
+                float x = Random.value * sum;
+                foreach (var o in orderable)
+                {
+                    if (o == lastOrder || o.orderWeight <= 0f) continue;
+                    r = o;
+                    x -= o.orderWeight;
+                    if (x <= 0f) break;
+                }
+            }
+            if (!r) do r = orderable[Random.Range(0, orderable.Count)]; while (r == lastOrder);
             lastOrder = r;
             return r;
         }
